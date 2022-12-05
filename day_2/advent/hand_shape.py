@@ -33,9 +33,10 @@ class HandShape(ABC):
 
 class Rock(HandShape):
     Code = 'A'
+    Score = 1
 
     def __init__(self, code: Optional[str] = Code):
-        super().__init__(code, 1)
+        super().__init__(code, Rock.Score)
 
     def _do_play(self, challenger: 'HandShape') -> Tuple[Result, Result]:
         if isinstance(challenger, Paper):
@@ -47,9 +48,10 @@ class Rock(HandShape):
 
 class Paper(HandShape):
     Code = 'B'
+    Score = 2
 
     def __init__(self, code: Optional[str] = Code):
-        super().__init__(code, 2)
+        super().__init__(code, Paper.Score)
 
     def _do_play(self, challenger: 'HandShape') -> Tuple[Result, Result]:
         if isinstance(challenger, Scissors):
@@ -62,9 +64,10 @@ class Paper(HandShape):
 
 class Scissors(HandShape):
     Code = 'C'
+    Score = 3
 
     def __init__(self, code: Optional[str] = Code):
-        super().__init__(code, 3)
+        super().__init__(code, Scissors.Score)
 
     def _do_play(self, challenger: 'HandShape') -> Tuple[Result, Result]:
         if isinstance(challenger, Rock):
@@ -94,18 +97,20 @@ class HandShapeFactory:
 
     @classmethod
     def create_loosing_shape(cls, code: str) -> HandShape:
-        if code == Rock.Code:
-            return Scissors()
-        elif code == Paper.Code:
-            return Rock()
-        elif code == Scissors.Code:
-            return Paper()
+        match code:
+            case Rock.Code:
+                return Scissors()
+            case Paper.Code:
+                return Rock()
+            case Scissors.Code:
+                return Paper()
 
     @classmethod
     def create_winning_shape(cls, code: str) -> HandShape:
-        if code == Rock.Code:
-            return Paper()
-        elif code == Paper.Code:
-            return Scissors()
-        elif code == Scissors.Code:
-            return Rock()
+        match code:
+            case Rock.Code:
+                return Paper()
+            case Paper.Code:
+                return Scissors()
+            case Scissors.Code:
+                return Rock()
