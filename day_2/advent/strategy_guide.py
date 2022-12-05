@@ -1,6 +1,13 @@
+from enum import Enum
 from typing import Tuple
 
 from advent.hand_shape import HandShapeFactory
+
+
+class GameResult(Enum):
+    LOOSE = 'X'
+    DRAW = 'Y'
+    WIN = 'Z'
 
 
 class StrategyGuide:
@@ -33,17 +40,18 @@ class StrategyGuide:
 
         for strategy in self._strategies:
             opponent_shape = shape_factory.create_hand_shape(strategy[0])
-            if strategy[1] == 'Y':  # DRAW
-                my_shape = shape_factory.create_hand_shape(opponent_shape.code)
-            elif strategy[1] == 'X':  # LOOSE
-                my_shape = HandShapeFactory.create_loosing_shape(opponent_shape.code)
-            else:  # WIN
-                my_shape = HandShapeFactory.create_winning_shape(opponent_shape.code)
-
-            print(opponent_shape.code, my_shape.code)
+            match strategy[1]:
+                case GameResult.DRAW.value:
+                    my_shape = shape_factory.create_hand_shape(opponent_shape.code)
+                case GameResult.LOOSE.value:
+                    my_shape = HandShapeFactory.create_loosing_shape(opponent_shape.code)
+                case GameResult.WIN.value:
+                    my_shape = HandShapeFactory.create_winning_shape(opponent_shape.code)
+                case _:
+                    print(f'Unknown game result {strategy[1]} found')
+                    continue
 
             play_result = my_shape.play(opponent_shape)
-            print(play_result)
             result[0] += play_result[0]
             result[1] += play_result[1]
 
