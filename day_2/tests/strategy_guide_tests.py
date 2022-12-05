@@ -22,5 +22,4 @@ class StrategyGuideTest(unittest.TestCase):
             ('C', 'Z')
         )
         result = strategy_guide.play_part_2()
-        print(result)
         self.assertEqual(result[0], 12)
