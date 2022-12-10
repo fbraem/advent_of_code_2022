@@ -15,7 +15,9 @@ class Rope:
 
     def move(self, direction: str):
         self.__move_head(direction)
-        self.__move_knots(direction, 1)
+        for index, knot in enumerate(self._knots):
+            if index > 0:
+                self.__move_knots(direction, index)
 
     def find_knot(self, pos: Tuple[int, int]) -> int:
         for index, knot in enumerate(self._knots):
@@ -36,21 +38,19 @@ class Rope:
 
     def __move_knots(self, direction: str, knot: int):
         # Check if the tail must be moved
-        col_distance = self._knots[knot][1] - self._knots[knot - 1][1]
-        row_distance = self._knots[knot][0] - self._knots[knot - 1][0]
-        print(f'{row_distance=}, {col_distance=}')
+        col_distance = self._knots[knot - 1][1] - self._knots[knot][1]
+        # print(f'{col_distance=}')
+        if col_distance > 1:
+            self._knots[knot] = (self._knots[knot-1][0], self._knots[knot-1][1] - 1)
+        if col_distance < -1:
+            self._knots[knot] = (self._knots[knot-1][0], self._knots[knot - 1][1] + 1)
 
-        if abs(row_distance) > 1 or abs(col_distance) > 1:
-            match direction:
-                case 'R':
-                    self._knots[knot] = (self._knots[knot - 1][0], self._knots[knot - 1][1] - 1)
-                case 'L':
-                    self._knots[knot] = (self._knots[knot - 1][0], self._knots[knot - 1][1] + 1)
-                case 'U':
-                    self._knots[knot] = (self._knots[knot - 1][0] + 1, self._knots[knot - 1][1])
-                case 'D':
-                    self._knots[knot] = (self._knots[knot - 1][0] - 1, self._knots[knot - 1][1])
-
+        row_distance = self._knots[knot - 1][0] - self._knots[knot][0]
+        # print(f'{row_distance=}')
+        if row_distance > 1:
+            self._knots[knot] = (self._knots[knot-1][0] - 1, self._knots[knot-1][1])
+        if row_distance < -1:
+            self._knots[knot] = (self._knots[knot-1][0] + 1, self._knots[knot-1][1])
 
     def __str__(self):
         return f'{self._knots[0]=}, {self._knots[1]=}'
