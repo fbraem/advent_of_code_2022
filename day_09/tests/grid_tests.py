@@ -7,9 +7,9 @@ from advent.rope import Rope
 class GridTests(unittest.TestCase):
     def test_grid(self):
         rope = Rope((5, 1), (5, 1))
-        grid = Grid(5, 6, rope)
+        grid = Grid(rope)
 
-        self.assertEqual(1, grid.get_visited(5, 1), 'The start position should be visited')
+        self.assertTrue(grid.is_visited((5, 1)), 'The start position should be visited')
 
         grid.move_rope('R', 4)
         grid.move_rope('U', 4)
@@ -26,7 +26,7 @@ class GridTests(unittest.TestCase):
         start_knot = (5, 1)
         rope = Rope(*(start_knot,) * 10)
 
-        grid = Grid(5, 6, rope)
+        grid = Grid(rope)
         grid.move_rope('R', 4)
         grid.move_rope('U', 4)
         grid.move_rope('L', 3)
@@ -42,7 +42,7 @@ class GridTests(unittest.TestCase):
         start_knot = (16, 12)
         rope = Rope(*(start_knot,) * 10)
 
-        grid = Grid(21, 26, rope)
+        grid = Grid(rope)
         grid.move_rope('R', 5)
         grid.move_rope('U', 8)
         grid.move_rope('L', 8)
@@ -53,4 +53,3 @@ class GridTests(unittest.TestCase):
         grid.move_rope('U', 20)
 
         self.assertEqual(36, grid.number_of_visits, 'The tail should have visited 36 positions')
-        grid.print_visits()
