@@ -39,14 +39,18 @@ class Rope:
     def __move_knots(self, direction: str, knot: int):
         # Check if the tail must be moved
         col_distance = self._knots[knot - 1][1] - self._knots[knot][1]
-        # print(f'{col_distance=}')
+        row_distance = self._knots[knot - 1][0] - self._knots[knot][0]
+        # print(f'{knot=} - {row_distance=} / {col_distance=}')
         if col_distance > 1:
-            self._knots[knot] = (self._knots[knot-1][0], self._knots[knot-1][1] - 1)
+            if row_distance < -1:
+                self._knots[knot] = (self._knots[knot-1][0] + 1, self._knots[knot-1][1] - 1)
+            else:
+                self._knots[knot] = (self._knots[knot - 1][0], self._knots[knot - 1][1] - 1)
         if col_distance < -1:
             self._knots[knot] = (self._knots[knot-1][0], self._knots[knot - 1][1] + 1)
 
         row_distance = self._knots[knot - 1][0] - self._knots[knot][0]
-        # print(f'{row_distance=}')
+        # print(f'{knot=} - {row_distance=}')
         if row_distance > 1:
             self._knots[knot] = (self._knots[knot-1][0] - 1, self._knots[knot-1][1])
         if row_distance < -1:
