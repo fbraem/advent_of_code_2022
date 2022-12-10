@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 class Rope:
@@ -16,6 +16,12 @@ class Rope:
     def move(self, direction: str):
         self.__move_head(direction)
         self.__move_knots(direction, 1)
+
+    def find_knot(self, pos: Tuple[int, int]) -> int:
+        for index, knot in enumerate(self._knots):
+            if knot[0] == pos[0] and knot[1] == pos[1]:
+                return index
+        return -1
 
     def __move_head(self, direction: str):
         match direction:
