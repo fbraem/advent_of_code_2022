@@ -28,3 +28,13 @@ class Grid:
                 if c > 0:
                     count += 1
         return count
+
+    def print_visits(self):
+        for row in self._grid:
+            line = ''
+            for c in row:
+                if c > 0:
+                    line += ' #'
+                else:
+                    line += ' .'
+            print(line)
