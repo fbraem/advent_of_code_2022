@@ -1,6 +1,15 @@
 from typing import Tuple, Optional
 
 
+def signum(i: int):
+    if i > 0:
+        return 1
+    if i == 0:
+        return 0
+    if i < 0:
+        return -1
+
+
 class Rope:
     def __init__(self, *knots: Tuple[int, int]):
         self._knots = list(knots)
@@ -40,21 +49,12 @@ class Rope:
         # Check if the tail must be moved
         col_distance = self._knots[knot - 1][1] - self._knots[knot][1]
         row_distance = self._knots[knot - 1][0] - self._knots[knot][0]
-        # print(f'{knot=} - {row_distance=} / {col_distance=}')
-        if col_distance > 1:
-            if row_distance < -1:
-                self._knots[knot] = (self._knots[knot-1][0] + 1, self._knots[knot-1][1] - 1)
-            else:
-                self._knots[knot] = (self._knots[knot - 1][0], self._knots[knot - 1][1] - 1)
-        if col_distance < -1:
-            self._knots[knot] = (self._knots[knot-1][0], self._knots[knot - 1][1] + 1)
 
-        row_distance = self._knots[knot - 1][0] - self._knots[knot][0]
-        # print(f'{knot=} - {row_distance=}')
-        if row_distance > 1:
-            self._knots[knot] = (self._knots[knot-1][0] - 1, self._knots[knot-1][1])
-        if row_distance < -1:
-            self._knots[knot] = (self._knots[knot-1][0] + 1, self._knots[knot-1][1])
+        if abs(col_distance) > 1 or abs(row_distance) > 1:
+            self._knots[knot] = (
+                self._knots[knot][0] + signum(row_distance),
+                self._knots[knot][1] + signum(col_distance)
+            )
 
     def __str__(self):
         return f'{self._knots[0]=}, {self._knots[1]=}'
