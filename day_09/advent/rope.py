@@ -14,31 +14,36 @@ class Rope:
         return self._knots[-1]
 
     def move(self, direction: str):
+        self.__move_knots(direction, 0)
+
+    def __move_knots(self, direction: str, knot: int):
+        next_knot = knot + 1
         match direction:
             case 'R':  # Right
-                self._knots[0] = (self._knots[0][0], self._knots[0][1] + 1)
+                self._knots[knot] = (self._knots[knot][0], self._knots[knot][1] + 1)
             case 'L':  # Left
-                self._knots[0] = (self._knots[0][0], self._knots[0][1] - 1)
+                self._knots[knot] = (self._knots[knot][0], self._knots[knot][1] - 1)
             case 'U':  # Up
-                self._knots[0] = (self._knots[0][0] - 1, self._knots[0][1])
+                self._knots[knot] = (self._knots[knot][0] - 1, self._knots[knot][1])
             case 'D':  # Down
-                self._knots[0] = (self._knots[0][0] + 1, self._knots[0][1])
+                self._knots[knot] = (self._knots[knot][0] + 1, self._knots[knot][1])
 
         # Check if the tail must be moved
-        col_distance = self._knots[-1][1] - self._knots[0][1]
-        row_distance = self._knots[-1][0] - self._knots[0][0]
+        col_distance = self._knots[next_knot][1] - self._knots[knot][1]
+        row_distance = self._knots[next_knot][0] - self._knots[knot][0]
         print(f'{row_distance=}, {col_distance=}')
 
         if abs(row_distance) > 1 or abs(col_distance) > 1:
             match direction:
                 case 'R':
-                    self._knots[-1] = (self._knots[0][0], self._knots[0][1] - 1)
+                    self._knots[next_knot] = (self._knots[knot][0], self._knots[knot][1] - 1)
                 case 'L':
-                    self._knots[-1] = (self._knots[0][0], self._knots[0][1] + 1)
+                    self._knots[next_knot] = (self._knots[knot][0], self._knots[knot][1] + 1)
                 case 'U':
-                    self._knots[-1] = (self._knots[0][0] + 1, self._knots[0][1])
+                    self._knots[next_knot] = (self._knots[knot][0] + 1, self._knots[knot][1])
                 case 'D':
-                    self._knots[-1] = (self._knots[0][0] - 1, self._knots[0][1])
+                    self._knots[next_knot] = (self._knots[knot][0] - 1, self._knots[knot][1])
+
 
     def __str__(self):
         return f'{self._knots[0]=}, {self._knots[1]=}'
