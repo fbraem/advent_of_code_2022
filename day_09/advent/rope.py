@@ -14,7 +14,8 @@ class Rope:
         return self._knots[-1]
 
     def move(self, direction: str):
-        self.__move_knots(direction, 0)
+        for index in range(0, len(self._knots) - 1, 2):
+            self.__move_knots(direction, index)
 
     def __move_knots(self, direction: str, knot: int):
         next_knot = knot + 1
