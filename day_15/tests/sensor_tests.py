@@ -15,11 +15,12 @@ class SensorTests(unittest.TestCase):
         self.assertTrue(sensor.is_position_covered((9, -1)), 'This position should be covered')
         self.assertTrue(sensor.is_position_covered((7, -1)), 'This position should be covered')
         self.assertTrue(sensor.is_position_covered((5, 5)), 'This position should be covered')
+        self.assertTrue(sensor.is_position_covered((16, 8)), 'This position should be covered')
+        self.assertFalse(sensor.is_position_covered((9, -2)), 'This position should not be covered')
 
     def test_distance(self):
         sensor = Sensor((8, 7), (2, 10))
         self.assertEqual((-6, 3), sensor.distance_sensor_beacon, 'The distance should be (-6, 3)')
-        print(sensor.distance_sensor_beacon)
 
     def test_min_x(self):
         sensor = Sensor((8, 7), (2, 10))

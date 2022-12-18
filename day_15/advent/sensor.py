@@ -1,7 +1,5 @@
 from typing import Tuple
 
-from advent.polygon import is_in_polygon
-
 
 class Sensor:
     def __init__(self, pos: Tuple[int, int], nearest_beacon_pos: Tuple[int, int]):
@@ -47,16 +45,34 @@ class Sensor:
         line_length = abs(distance[0]) + abs(distance[1])
         return self._pos[1] + line_length
 
-    def is_position_covered(self, position: Tuple[int, int]):
-        return is_in_polygon(
-            [
-                (self._pos[0], self.min_y),
-                (self.max_x, self._pos[1]),
-                (self._pos[0], self.max_y),
-                (self.min_x, self._pos[1]),
-            ],
-            position
+    def is_position_covered(self, position: Tuple[int, int]) -> bool:
+        distance = self.distance_sensor_beacon
+        line_length = abs(distance[0]) + abs(distance[1])
+
+        distance_pos_x = abs(self._pos[0] - position[0])
+        distance_pos_y = abs(self._pos[1] - position[1])
+        # print(f'sensor_pos= {self._pos}')
+        # print(f'{line_length=}, {distance_pos_x=}, {distance_pos_y=}')
+        # print(f'min_x={self.min_x}, max_x={self.max_x}')
+        # print(f'min_y={self.min_y}, max_y={self.max_y}')
+
+        max_right_x = line_length - abs(self._pos[1] - position[1])
+        # print(f'{max_right_x=}')
+
+        left = (
+            self._pos[0] - line_length + distance_pos_y,
+            position[1]
         )
+        right = (
+            min(self._pos[0] + distance_pos_x, self._pos[0] + max_right_x),
+            position[1]
+        )
+        # print(f'{position=}, {left=}, {right=}')
+
+        if left == right:
+            return position == left
+
+        return left[0] <= position[0] <= right[0]
 
     def calc_coverage(self) -> list[Tuple[int, int]]:
         coverage = []
