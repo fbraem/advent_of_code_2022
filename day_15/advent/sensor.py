@@ -1,5 +1,7 @@
 from typing import Tuple
 
+from advent.polygon import is_in_polygon
+
 
 class Sensor:
     def __init__(self, pos: Tuple[int, int], nearest_beacon_pos: Tuple[int, int]):
@@ -19,6 +21,41 @@ class Sensor:
         return (
             self.nearest_beacon_position[0] - self._pos[0],
             self.nearest_beacon_position[1] - self._pos[1]
+        )
+
+    @property
+    def min_x(self) -> int:
+        distance = self.distance_sensor_beacon
+        line_length = abs(distance[0]) + abs(distance[1])
+        return self._pos[0] - line_length
+
+    @property
+    def max_x(self) -> int:
+        distance = self.distance_sensor_beacon
+        line_length = abs(distance[0]) + abs(distance[1])
+        return self._pos[0] + line_length
+
+    @property
+    def min_y(self) -> int:
+        distance = self.distance_sensor_beacon
+        line_length = abs(distance[0]) + abs(distance[1])
+        return self._pos[1] - line_length
+
+    @property
+    def max_y(self) -> int:
+        distance = self.distance_sensor_beacon
+        line_length = abs(distance[0]) + abs(distance[1])
+        return self._pos[1] + line_length
+
+    def is_position_covered(self, position: Tuple[int, int]):
+        return is_in_polygon(
+            [
+                (self._pos[0], self.min_y),
+                (self.max_x, self._pos[1]),
+                (self._pos[0], self.max_y),
+                (self.min_x, self._pos[1]),
+            ],
+            position
         )
 
     def calc_coverage(self) -> list[Tuple[int, int]]:

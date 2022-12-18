@@ -14,5 +14,5 @@ print('min y', grid.get_min_y())
 print('max y', grid.get_max_y())
 print('sum y', abs(grid.get_min_y()) + abs(grid.get_max_y()))
 
-print('Number of blocked positions for y=: 10', grid.count_blocked_beacon_in_row(10))
+print('Number of blocked positions for y=: 2000000', grid.count_blocked_beacon_in_row(10))
 print(grid)

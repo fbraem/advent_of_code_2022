@@ -8,40 +8,16 @@ class Grid:
         self._sensors = sensors
 
     def get_min_x(self) -> int:
-        sensor_coverage = []
-        [sensor_coverage.extend(self.get_sensor_coverage(sensor.position)) for sensor in self._sensors]
-        return min(
-            [sensor.position[0] for sensor in self._sensors] +
-            [sensor.nearest_beacon_position[0] for sensor in self._sensors] +
-            [pos[0] for pos in sensor_coverage]
-        )
+        return min([sensor.min_x for sensor in self._sensors])
 
     def get_min_y(self) -> int:
-        sensor_coverage = []
-        [sensor_coverage.extend(self.get_sensor_coverage(sensor.position)) for sensor in self._sensors]
-        return min(
-            [sensor.position[1] for sensor in self._sensors] +
-            [sensor.nearest_beacon_position[1] for sensor in self._sensors] +
-            [pos[1] for pos in sensor_coverage]
-        )
+        return min([sensor.min_y for sensor in self._sensors])
 
     def get_max_x(self) -> int:
-        sensor_coverage = []
-        [sensor_coverage.extend(self.get_sensor_coverage(sensor.position)) for sensor in self._sensors]
-        return max(
-            [sensor.position[0] for sensor in self._sensors] +
-            [sensor.nearest_beacon_position[0] for sensor in self._sensors] +
-            [pos[0] for pos in sensor_coverage]
-        )
+        return max([sensor.max_x for sensor in self._sensors])
 
     def get_max_y(self) -> int:
-        sensor_coverage = []
-        [sensor_coverage.extend(self.get_sensor_coverage(sensor.position)) for sensor in self._sensors]
-        return max(
-            [sensor.position[1] for sensor in self._sensors] +
-            [sensor.nearest_beacon_position[1] for sensor in self._sensors] +
-            [pos[1] for pos in sensor_coverage]
-        )
+        return max([sensor.max_y for sensor in self._sensors])
 
     def __str__(self) -> str:
         min_x = self.get_min_x()
@@ -60,7 +36,7 @@ class Grid:
                     result += 'S'
                 elif (x, y) in beacons:
                     result += 'B'
-                elif any([(x, y) in self.get_sensor_coverage(sensor.position) for sensor in self._sensors]):
+                elif self.is_position_covered((x, y)):
                     result += '#'
                 else:
                     result += '.'
@@ -69,12 +45,11 @@ class Grid:
 
         return result
 
-    def get_sensor_coverage(self, sensor_position: Tuple[int, int]) -> list[Tuple[int, int]]:
-        sensor_coverage = []
+    def is_position_covered(self, position: Tuple[int, int]) -> bool:
         for sensor in self._sensors:
-            if sensor_position == sensor.position:
-                return sensor.calc_coverage()
-        return sensor_coverage
+            if sensor.is_position_covered(position):
+                return True
+        return False
 
     def count_blocked_beacon_in_row(self, y: int) -> int:
         min_x = self.get_min_x()
@@ -85,7 +60,7 @@ class Grid:
 
         count = 0
         for x in range(min_x, max_x):
-            if any([(x, y) in self.get_sensor_coverage(sensor.position) for sensor in self._sensors]):
+            if self.is_position_covered((x, y)):
                 if (x, y) not in sensors and (x, y) not in beacons:
                     count += 1
 
