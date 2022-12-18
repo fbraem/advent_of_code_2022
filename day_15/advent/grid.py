@@ -1,5 +1,7 @@
 from typing import Tuple
 
+from shapely import Polygon, unary_union, clip_by_rect
+
 from advent.sensor import Sensor
 
 
@@ -65,3 +67,21 @@ class Grid:
                     count += 1
 
         return count
+
+    def find_free_position(self) -> Tuple[int, int]:
+        upoly = Polygon()
+        for sensor in self._sensors:
+            md = abs(sensor.position[0] - sensor.nearest_beacon_position[0]) + \
+                 abs(sensor.position[1] - sensor.nearest_beacon_position[1])
+            upoly = unary_union([upoly, Polygon(
+                [
+                    (sensor.position[0], sensor.position[1] + md),
+                    (sensor.position[0] - md, sensor.position[1]),
+                    (sensor.position[0], sensor.position[1] - md),
+                    (sensor.position[0] + md, sensor.position[1])
+                ]
+            )])
+
+        interior = clip_by_rect(upoly, 0, 0, 4_000_000, 4_000_000).interiors[0]
+        x, y = tuple(map(round, interior.centroid.coords[:][0]))
+        return x, y

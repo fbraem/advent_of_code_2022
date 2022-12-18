@@ -51,13 +51,8 @@ class Sensor:
 
         distance_pos_x = abs(self._pos[0] - position[0])
         distance_pos_y = abs(self._pos[1] - position[1])
-        # print(f'sensor_pos= {self._pos}')
-        # print(f'{line_length=}, {distance_pos_x=}, {distance_pos_y=}')
-        # print(f'min_x={self.min_x}, max_x={self.max_x}')
-        # print(f'min_y={self.min_y}, max_y={self.max_y}')
 
         max_right_x = line_length - abs(self._pos[1] - position[1])
-        # print(f'{max_right_x=}')
 
         left = (
             self._pos[0] - line_length + distance_pos_y,
@@ -67,7 +62,6 @@ class Sensor:
             min(self._pos[0] + distance_pos_x, self._pos[0] + max_right_x),
             position[1]
         )
-        # print(f'{position=}, {left=}, {right=}')
 
         if left == right:
             return position == left
